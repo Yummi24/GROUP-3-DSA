@@ -1,0 +1,67 @@
+FUNCTION AddEmployee(employeeID, name, role, salary)
+    IF employeeID NOT IN EmployeeDatabase
+        INSERT employeeID, name, role, salary INTO EmployeeDatabase
+        PRINT "Employee added successfully."
+    ELSE
+        PRINT "Employee ID already exists."
+    ENDIF
+END FUNCTION
+2. Process Payroll
+sql
+Copy
+Edit
+FUNCTION ProcessPayroll(employeeID, hoursWorked)
+    FIND employee IN EmployeeDatabase
+    IF employee EXISTS
+        salary = employee.salary
+        totalPay = salary * hoursWorked
+        PRINT "Payroll processed: " + totalPay
+    ELSE
+        PRINT "Employee not found."
+    ENDIF
+END FUNCTION
+MotorPH Inventory System - Pseudocode
+1. Add Stock
+pgsql
+Copy
+Edit
+FUNCTION AddStock(stockID, brand, details)
+    IF stockID NOT IN InventoryDatabase
+        INSERT stockID, brand, details INTO InventoryDatabase
+        INSERT stockID INTO SortedStockTree BY brand
+        PRINT "Stock added successfully."
+    ELSE
+        PRINT "Stock ID already exists."
+    ENDIF
+END FUNCTION
+2. Delete Stock
+sql
+Copy
+Edit
+FUNCTION DeleteStock(stockID)
+    IF stockID IN InventoryDatabase
+        REMOVE stockID FROM InventoryDatabase
+        REMOVE stockID FROM SortedStockTree
+        PRINT "Stock deleted successfully."
+    ELSE
+        PRINT "Stock not found."
+    ENDIF
+END FUNCTION
+3. Search Stock
+sql
+Copy
+Edit
+FUNCTION SearchStock(stockID)
+    IF stockID IN InventoryDatabase
+        RETURN InventoryDatabase[stockID]
+    ELSE
+        PRINT "Stock not found."
+    ENDIF
+END FUNCTION
+4. Sort Stocks by Brand
+sql
+Copy
+Edit
+FUNCTION SortStocks()
+    RETURN INORDER TRAVERSAL OF SortedStockTree
+END FUNCTION
