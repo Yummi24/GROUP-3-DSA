@@ -1,0 +1,70 @@
+class StockInventory {
+    private final Map<String, String> stockTable = new HashMap<>();
+    private final TreeMap<String, List<String>> stockTree = new TreeMap<>();
+
+    /**
+     * Adds a new stock item to the inventory.
+     */
+    public void addStock(String stockID, String brand, String details) {
+        if (stockID == null || brand == null || details == null) {
+            System.out.println("Invalid input: stockID, brand, and details cannot be null.");
+            return;
+        }
+
+        stockTable.put(stockID, details);
+        stockTree.computeIfAbsent(brand, k -> new ArrayList<>()).add(stockID);
+    }
+
+    /**
+     * Deletes a stock item from the inventory.
+     */
+    public void deleteStock(String stockID) {
+        if (!stockTable.containsKey(stockID)) {
+            System.out.println("Stock ID not found.");
+            return;
+        }
+
+        stockTable.remove(stockID);
+
+        // Remove stockID from stockTree while avoiding ConcurrentModificationException
+        Iterator<Map.Entry<String, List<String>>> iterator = stockTree.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, List<String>> entry = iterator.next();
+            entry.getValue().remove(stockID);
+
+            // Remove the brand if no stock items remain
+            if (entry.getValue().isEmpty()) {
+                iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * Returns a sorted list of brands in the inventory.
+     */
+    public List<String> getSortedBrands() {
+        return new ArrayList<>(stockTree.keySet());
+    }
+
+    /**
+     * Searches for a stock item by its ID.
+     */
+    public String searchStock(String stockID) {
+        return stockTable.getOrDefault(stockID, "Stock not found.");
+    }
+
+    /**
+     * Displays the entire inventory.
+     */
+    public void displayInventory() {
+        if (stockTable.isEmpty()) {
+            System.out.println("Inventory is empty.");
+            return;
+        }
+
+        System.out.println("Stock Inventory:");
+        for (Map.Entry<String, String> entry : stockTable.entrySet()) {
+            System.out.println("Stock ID: " + entry.getKey() + " | Details: " + entry.getValue());
+        }
+    }
+}
